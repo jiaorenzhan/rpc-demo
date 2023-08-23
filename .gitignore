@@ -1,0 +1,14 @@
+### Example user template template
+### Example user template
+
+# IntelliJ project files
+.idea
+*.iml
+out
+gen
+demoservice/target
+demoService2/target
+jrpc/jrpc-core/target
+jrpc/jrpc-server/target
+jrpc/jrpc-client/target
+.class
