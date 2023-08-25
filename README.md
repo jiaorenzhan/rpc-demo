@@ -4,10 +4,13 @@ rpc-demo
 ## demoservice
 服务端 demo服务
 
+## demoservice-interface
+服务端接口定义 demo服务
+
 ## demoService2
 客户端 demo服务
 
-## jprc
+## jrpc
 rpc 框架
 
 ### jrpc-core
