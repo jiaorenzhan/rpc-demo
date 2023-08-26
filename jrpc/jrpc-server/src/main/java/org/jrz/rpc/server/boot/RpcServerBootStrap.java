@@ -15,7 +15,9 @@ public class RpcServerBootStrap {
     @PostConstruct
     public void startServer() {
 
-        rpcServerRunner.run();
+      new Thread(()->{
+          rpcServerRunner.run();
+      }).start();
 
 
     }

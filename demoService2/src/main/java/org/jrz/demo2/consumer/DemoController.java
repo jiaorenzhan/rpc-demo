@@ -17,9 +17,8 @@ public class DemoController {
     @RequestMapping("/hello")
     public String hello() {
 
-        userService.sayHello();
+        return   userService.sayHello("hello");
 
-        return "hello";
-
+//        return "hello";
     }
 }

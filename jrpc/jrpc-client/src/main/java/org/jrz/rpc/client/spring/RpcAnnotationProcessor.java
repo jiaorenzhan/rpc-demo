@@ -55,6 +55,5 @@ public class RpcAnnotationProcessor implements BeanPostProcessor, ApplicationCon
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         proxyFactory = applicationContext.getBean(ProxyFactory.class);
 
-
     }
 }

@@ -13,7 +13,9 @@ public class RpcBootStrap {
 
     @PostConstruct
     public void start() {
-        rpcClientRunner.run();
+        new Thread(()->{
+            rpcClientRunner.run();
+        }).start();
     }
 
 

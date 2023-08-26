@@ -31,6 +31,7 @@ public class NettyServer implements RpcServer {
         EventLoopGroup boos = new NioEventLoopGroup(1, new DefaultThreadFactory("boss"));
         EventLoopGroup worker = new NioEventLoopGroup(0, new DefaultThreadFactory("worker"));
         EventExecutorGroup bussiness = new UnorderedThreadPoolEventExecutor(NettyRuntime.availableProcessors() * 2 + 1, new DefaultThreadFactory("bussiness"));
+        RpcRequestHandler rpcRequestHandler = new RpcRequestHandler();
 
         try {
             ServerBootstrap bootstrap = new ServerBootstrap();
@@ -44,13 +45,13 @@ public class NettyServer implements RpcServer {
                             ChannelPipeline channelPipeline = ch.pipeline();
                             //编码
                             channelPipeline.addLast("frameEncoder", new FrameEncoder());
-                            channelPipeline.addLast("", new RpcResponseEncoder());
+                            channelPipeline.addLast("rpcResponseEncoder", new RpcResponseEncoder());
 
                             //解码
                             channelPipeline.addLast("frameDecoder", new FrameDecoder());
-                            channelPipeline.addLast("", new RpcRequestDecoder());
+                            channelPipeline.addLast("rpcRequestDecoder", new RpcRequestDecoder());
 
-                            channelPipeline.addLast(bussiness, "rpcRequestHandler", new RpcRequestHandler());
+                            channelPipeline.addLast(bussiness, "rpcRequestHandler", rpcRequestHandler);
 
 
                         }
