@@ -18,8 +18,8 @@ public class RpcClientConfiguration {
     @Value("${rpc.client.api.package}")
     private String rpcClientApiPackage;
 
-/*    @Value("${rpc.cluster.strategy}")
-    private String rpcClientClusterStrategy;*/
+    @Value("${rpc.cluster.strategy}")
+    private String rpcClientClusterStrategy;
 
     @Value("${rpc.client.zk.timeout:10000}")
     private Integer connectTimeout;
@@ -56,13 +56,13 @@ public class RpcClientConfiguration {
         this.rpcClientApiPackage = rpcClientApiPackage;
     }
 
-/*    public String getRpcClientClusterStrategy() {
+    public String getRpcClientClusterStrategy() {
         return rpcClientClusterStrategy;
     }
 
     public void setRpcClientClusterStrategy(String rpcClientClusterStrategy) {
         this.rpcClientClusterStrategy = rpcClientClusterStrategy;
-    }*/
+    }
 
     public Integer getConnectTimeout() {
         return connectTimeout;

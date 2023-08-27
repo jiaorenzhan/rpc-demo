@@ -9,6 +9,8 @@ import io.netty.util.concurrent.DefaultThreadFactory;
 import io.netty.util.concurrent.Promise;
 import org.apache.commons.collections.CollectionUtils;
 import org.jrz.rpc.cache.ServiceProviderCache;
+import org.jrz.rpc.client.cluster.DefaultStrategyProvider;
+import org.jrz.rpc.client.cluster.LoadBalanceStrategy;
 import org.jrz.rpc.data.RpcRequest;
 import org.jrz.rpc.data.RpcResponse;
 import org.jrz.rpc.enums.StatusEnum;
@@ -32,6 +34,9 @@ public class RpcRequestManger {
     @Autowired
     private ServiceProviderCache serviceProviderCache;
 
+    @Autowired
+    private DefaultStrategyProvider defaultStrategyProvider;
+
     public RpcResponse sendRequest(RpcRequest request) {
 
         List<ServiceProvider> serviceProviders = serviceProviderCache.get(request.getClassName());
@@ -40,8 +45,9 @@ public class RpcRequestManger {
             throw new RpcException(StatusEnum.NOT_FOUND_SERVICE_PROVINDER);
         }
         //找到 rpc调用
-        //todo 负载均衡
-        ServiceProvider serviceProvider = serviceProviders.get(0);
+        // 负载均衡
+        LoadBalanceStrategy loadBalanceStrategy = defaultStrategyProvider.getStrategy();
+        ServiceProvider serviceProvider = loadBalanceStrategy.select(serviceProviders);
         return requestByNetty(request, serviceProvider);
 
     }
@@ -70,7 +76,7 @@ public class RpcRequestManger {
                 Channel channel = future.channel();
                 RequestPromise requestPromise = new RequestPromise(channel.eventLoop());
                 channel.writeAndFlush(request);
-                RpcRequestHolder.addRequestPromise(request.getRequestId(),requestPromise);
+                RpcRequestHolder.addRequestPromise(request.getRequestId(), requestPromise);
 
                 RpcResponse response = (RpcResponse) requestPromise.get();
                 return response;
@@ -78,7 +84,7 @@ public class RpcRequestManger {
         } catch (Exception e) {
             System.out.println("connect server error:");
             System.out.println(e);
-        }finally {
+        } finally {
             RpcRequestHolder.removeRequestPromise(request.getRequestId());
         }
 
