@@ -1,6 +1,7 @@
 package org.jrz.rpc.client.cluster;
 
 import org.jrz.rpc.annotation.JrpcLoadBalance;
+import org.jrz.rpc.client.cluster.lb.PollingLoadBalanceStrategy;
 import org.jrz.rpc.client.conf.RpcClientConfiguration;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,12 +23,15 @@ public class DefaultStrategyProvider implements StartegyProvider, ApplicationCon
 
     private LoadBalanceStrategy loadBalanceStrategy = null;
 
+    @Autowired
+    private PollingLoadBalanceStrategy pollingLoadBalanceStrategy;
+
     @Override
     public LoadBalanceStrategy getStrategy() {
         if (loadBalanceStrategy != null) {
             return loadBalanceStrategy;
         }
-        return null;
+        return pollingLoadBalanceStrategy;
     }
 
     @Override

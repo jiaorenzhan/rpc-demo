@@ -14,7 +14,6 @@ public class RedisLock {
     public boolean lock(String lockey) {
         RLock lock = redissonClient.getLock(lockey);
         lock.lock();
-
         return true;
     }
 
